@@ -21,23 +21,30 @@ app.use(cors({
 }));
 
 const products = [
-  { id: 1, name: 'Product 1', description: 'Description of Product 1', price: 100 },
-  { id: 2, name: 'Product 2', description: 'Description of Product 2', price: 200 },
-  { id: 3, name: 'Product 3', description: 'Description of Product 3', price: 300 },
+  { id: 1, name: 'Tokopedia', description: 'Pay Tokopedia'},
+  { id: 2, name: 'Shopee', description: 'Pay Shopee'},
+  { id: 3, name: 'Lazada', description: 'Pay Lazada' },
+  { id: 4, name: 'Bukalapak', description: 'Pay Bukalapak' },
 ];
 
 app.get('/products', (req, res) => {
   res.json(products);
 });
 
-app.post('/payment', (req, res) => {
-  const { productId } = req.body;
-  const product = products.find(p => p.id === productId);
-  if (product && wallet.balance >= product.price) {
-    wallet.balance -= product.price;
-    res.json({ message: 'Payment successful' });
-  } else {
-    res.status(400).json({ message: 'Payment failed' });
+app.post('/payment', async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const response = await axios.post('http://localhost:3000/payments', {
+      amount,
+    }, {
+      headers: {
+        authorization: `Bearer ${authorization}` 
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -92,7 +99,7 @@ app.get('/history', async (req, res) => {
 
 app.get('/wallet', async (req, res) => {
   try {
-    const response = await axios.get('http://localhost:3000/wallet', {
+    const response = await axios.get('http://localhost:3000/wallets', {
       headers: {
         authorization: `Bearer ${authorization}` 
       }

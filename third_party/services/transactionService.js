@@ -59,19 +59,62 @@ const createPayment = async (
   userToken,
   type
 ) => {
+  const t = await db.sequelize.transaction();
   try {
     const status = 1;
-    console.log(user);
-    await db.Transaction.create({
-      order_id,
-      amount,
-      user_id: user.id,
-      createdAt,
-      status,
+
+    const lastAmount = await db.Wallet.findOne({
+      where: { user_id: userToken.id },
+      attributes: ['balance'],
+      transaction: t
     });
+    const balance = lastAmount.balance;
+    
+    if (parseInt(balance) < amount) {
+      return { status: 2, error: "Insufficient balance" };
+    }
+
+    const latestTransaction = await db.Transaction.findOne({
+      order: [['createdAt', 'DESC']],
+      limit: 1,
+      attributes: ['order_id'],
+      where: { user_id: userToken.id, type: "Payment" },
+      transaction: t
+    });
+
+    let newOrderId;
+    if (latestTransaction && latestTransaction.order_id) {
+      const latestOrderIdNumber = parseInt(latestTransaction.order_id.split('-')[1], 10);
+      const newOrderIdNumber = latestOrderIdNumber + 1;
+      newOrderId = `PAY-${newOrderIdNumber.toString().padStart(3, '0')}`;
+    } else {
+      newOrderId = `PAY-${userToken.id}001`;
+    }
+
+    const order_id = newOrderId;
+    
+    await db.Transaction.create(
+      {
+        order_id,
+        amount,
+        user_id: userToken.id,
+        createdAt,
+        status,
+        type: "Payment",
+      },
+      { transaction: t }
+    );
+
+    await db.Wallet.update(
+      { balance: db.sequelize.literal(`balance - ${amount}`) },
+      { where: { user_id: userToken.id } },
+      { transaction: t }
+    );
+    await t.commit();
     return { order_id, amount, status };
   } catch (error) {
     console.log(error);
+    await t.rollback();
     throw new Error("Failed to process payment");
   }
 };

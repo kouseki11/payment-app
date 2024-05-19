@@ -12,6 +12,21 @@ A brief description of what this project does and who it's for
 - Transaction History
 
 
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+### Third Party Folder
+`PORT`
+`DB_HOST`
+`DB_USER`
+`DB_PASSWORD`
+`DB_NAME`
+`DB_DIALECT`
+
+### Backend Folder
+`PORT`
+`FULL_NAME`
 ## Installation
 
 Install payment-app with npm open 3 terminal
@@ -46,10 +61,12 @@ Install payment-app with npm open 3 terminal
   http://localhost:3333/api-docs/
 ```
 
+![Swagger Documentation](https://i.ibb.co.com/y582tH4/Screenshot-2024-05-20-015359.png)
+
 #### Deposit
 
 ```http
-  POST /api/deposit
+  POST /deposit
 ```
 
 | Parameter | Type     | Description                |
@@ -58,10 +75,13 @@ Install payment-app with npm open 3 terminal
 | `amount`   | `double` | **Required** |
 | `timestamp` | `timsestamp` | **Required** |
 
+#### Deposit Response
+![Deposit](https://i.ibb.co.com/3MfZxMq/Screenshot-2024-05-20-020833.png)
+
 #### Withdrawal
 
 ```http
-  POST /api/withdraw
+  POST /withdrawal
 ```
 
 | Parameter | Type     | Description                       |
@@ -70,9 +90,60 @@ Install payment-app with npm open 3 terminal
 | `amount`   | `double` | **Required** |
 | `timestamp` | `timsestamp` | **Required** |
 
+#### Withdrawal Response
+![Withdrawal](https://i.ibb.co.com/StCfZ6P/Screenshot-2024-05-20-022258.png)
+
+#### Payment
+
+```http
+  POST /payment
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `order_id` | `string` | **Required** |
+| `amount`   | `double` | **Required** |
+| `timestamp` | `timsestamp` | **Required** |
+
+#### Payment Response
+![Payment](https://i.ibb.co.com/4YWLxnt/Screenshot-2024-05-20-022804.png)
+
+#### History
+
+```http
+  GET /history
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `user_id` | `integer` | **Required** |
+
+#### History Response
+![History](https://i.ibb.co.com/qMy3yBY/Screenshot-2024-05-20-023049.png)
 
 
-## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+## Page Screenshots
+
+### Dashboard
+![Dashboard](https://i.ibb.co.com/7b3ZTdZ/Screenshot-2024-05-20-015710.png)
+
+### Deposit Page
+![Deposit](https://i.ibb.co.com/wC4QNgq/Screenshot-2024-05-20-015953.png)
+
+### Withdraw Page
+![Withdraw](https://i.ibb.co.com/3cHrtVq/Screenshot-2024-05-20-020128.png)
+
+### Payment Page
+![Payment](https://i.ibb.co.com/KNnsYLc/Screenshot-2024-05-20-020244.png)
+
+### Transaction History Page
+![Transaction](https://i.ibb.co.com/t8Lk993/Screenshot-2024-05-20-020439.png)
+
+
+## Tech Stack
+
+**Client:** React, TailwindCSS
+
+**Server:** Node, Express
 

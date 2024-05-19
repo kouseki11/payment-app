@@ -21,7 +21,7 @@ app.post("/deposits", checkTokenMiddleware, transactionController.deposit);
 app.post("/withdrawals", checkTokenMiddleware, transactionController.withdraw);
 app.get("/histories", checkTokenMiddleware, transactionController.history);
 app.post("/payments", checkTokenMiddleware, transactionController.payment);
-app.get("/wallet", checkTokenMiddleware, transactionController.wallet);
+app.get("/wallets", checkTokenMiddleware, transactionController.wallet);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
