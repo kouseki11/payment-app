@@ -61,7 +61,7 @@ Install payment-app with npm open 3 terminal
 #### Withdrawal
 
 ```http
-  GET /api/withdraw
+  POST /api/withdraw
 ```
 
 | Parameter | Type     | Description                       |
