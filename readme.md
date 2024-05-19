@@ -106,7 +106,7 @@ Install payment-app with npm open 3 terminal
 | `timestamp` | `timsestamp` | **Required** |
 
 #### Payment Response
-![Payment](https://i.ibb.co.com/tMmTmBp/Screenshot-2024-05-20-023049.png)
+![Payment](https://i.ibb.co.com/4YWLxnt/Screenshot-2024-05-20-022804.png)
 
 #### History
 
@@ -119,7 +119,7 @@ Install payment-app with npm open 3 terminal
 | `user_id` | `integer` | **Required** |
 
 #### History Response
-![History](https://i.ibb.co.com/qMy3yBY/Screenshot-2024-05-20-023049.png)
+![History](https://i.ibb.co.com/tMmTmBp/Screenshot-2024-05-20-023049.png)
 
 
 
