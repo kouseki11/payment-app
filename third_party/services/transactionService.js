@@ -6,6 +6,10 @@ const createDeposit = async ( amount, createdAt, user, userToken) => {
   try {
     const status = 1;
 
+    if (amount <= 0) {
+      return { status: 2, error: "Insufficient balance" };
+    }
+
     const latestTransaction = await db.Transaction.findOne({
       order: [['createdAt', 'DESC']],
       limit: 1,
@@ -70,7 +74,7 @@ const createPayment = async (
     });
     const balance = lastAmount.balance;
     
-    if (parseInt(balance) < amount) {
+    if (parseInt(balance) < amount || amount <= 0) {
       return { status: 2, error: "Insufficient balance" };
     }
 
@@ -138,7 +142,7 @@ const createWithdrawal = async (
     });
     const balance = lastAmount.balance;
     
-    if (parseInt(balance) < amount) {
+    if (parseInt(balance) < amount || amount <= 0) {
       return { status: 2, error: "Insufficient balance" };
     }
 
