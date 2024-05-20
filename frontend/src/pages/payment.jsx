@@ -7,6 +7,8 @@ export default function Payment() {
   const [amount, setAmount] = useState({});
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,27 +26,40 @@ export default function Payment() {
     }));
   };
 
-  const handlePayment = async (product) => {
-    setLoading((prevLoading) => ({ ...prevLoading, [product.id]: true }));
+  const handlePayment = async () => {
+    if (!selectedProduct) return;
+    setLoading(true);
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       const response = await axios.post("http://localhost:3333/payment", {
-        amount: amount[product.id] || "",
-        productId: product.id,
+        amount: amount[selectedProduct.id] || "",
+        productId: selectedProduct.id,
       });
       setMessage(`Payment ${response.data.status === 1 ? 'successful' : 'failed'}`);
       setAmount((prevAmount) => ({
         ...prevAmount,
-        [product.id]: "", 
+        [selectedProduct.id]: "", 
       }));
     } catch (error) {
       setMessage("Payment failed");
     } finally {
+      setLoading(false);
+      setIsModalOpen(false);
       setTimeout(() => {
-        setLoading((prevLoading) => ({ ...prevLoading, [product.id]: false }));
-      }, 2000);
+        setMessage("");
+      }, 3000);
     }
+  };
+
+  const openModal = (product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
   };
 
   return (
@@ -55,19 +70,11 @@ export default function Payment() {
           <div key={product.id} className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold text-gray-800">{product.name}</h2>
             <p className="mt-2 text-gray-600">{product.description}</p>
-            <input
-              type="text"
-              value={amount[product.id] || ""}
-              onChange={(e) => handleAmountChange(product.id, e.target.value)}
-              placeholder="Amount"
-              className="mt-4 p-3 border rounded-md outline-none focus:border-blue-500 w-80"
-            />
             <button
               className="mt-6 ml-2 px-4 py-2 bg-yellow-500 text-white rounded-full"
-              onClick={() => handlePayment(product)}
-              disabled={loading[product.id]} 
+              onClick={() => openModal(product)}
             >
-              {loading[product.id] ? "Processing..." : "Pay"}
+              Pay
             </button>
           </div>
         ))}
@@ -78,7 +85,41 @@ export default function Payment() {
       >
         Back
       </Link>
-      {message == 'Payment successful' ? <p className="mt-4 text-sm text-green-600">{message}</p> : <p className="mt-4 text-sm text-red-600">{message}</p>}
+      {message && (
+        <p className={`mt-4 text-sm ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
+          {message}
+        </p>
+      )}
+      {isModalOpen && selectedProduct && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 gap-3 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold text-gray-800">{selectedProduct.name}</h2>
+            <p className="mt-2 text-gray-600">{selectedProduct.description}</p>
+            <input
+              type="text"
+              value={amount[selectedProduct.id] || ""}
+              onChange={(e) => handleAmountChange(selectedProduct.id, e.target.value)}
+              placeholder="Amount"
+              className="mt-4 p-3 border rounded-md outline-none focus:border-blue-500 w-80"
+            />
+            <div className="flex gap-2">
+            <button
+              className="mt-6 px-4 py-2 bg-yellow-500 text-white rounded-full"
+              onClick={handlePayment}
+              disabled={loading}
+            >
+              {loading ? "Processing..." : "Pay"}
+            </button>
+            <button
+              className="mt-6 px-4 py-2 bg-gray-500 text-white rounded-full"
+              onClick={closeModal}
+            >
+              Cancel
+            </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

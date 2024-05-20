@@ -135,7 +135,8 @@ Install payment-app with npm open 3 terminal
 ![Withdraw](https://i.ibb.co.com/3cHrtVq/Screenshot-2024-05-20-020128.png)
 
 ### Payment Page
-![Payment](https://i.ibb.co.com/KNnsYLc/Screenshot-2024-05-20-020244.png)
+![Payment](https://i.ibb.co.com/j3HqwbS/Screenshot-2024-05-20-145322.png)
+![Payment Modal](https://i.ibb.co.com/F4m5GH6/Screenshot-2024-05-20-145545.png)
 
 ### Transaction History Page
 ![Transaction](https://i.ibb.co.com/FgHNFFn/Screenshot-2024-05-20-020439.png)
