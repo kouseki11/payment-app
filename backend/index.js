@@ -15,7 +15,7 @@ const fullName = process.env.FULL_NAME;
 const authorization = Buffer.from(fullName).toString('base64');
 
 app.use(cors({
-  origin: 'http://localhost:3001', 
+  origin: ['http://localhost:3001', 'http://localhost:3000'], 
   methods: ['GET', 'POST'], 
   allowedHeaders: ['Content-Type', 'Authorization'], 
 }));
